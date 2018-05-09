@@ -1,8 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* WikiMID
+* Giorgia Di Tommaso, Stefano Faralli, Giovanni Stilo, Paola Velardi
+*
+* 
+* Project and Resources:
+*  http://wikimid.tweets.di.uniroma1.it/wikimid/
+*  https://figshare.com/articles/Wiki-MID_Dataset_LOD_TSV_/6231326/1
+*  https://github.com/stefanofaralli/wikimid
+* License  
+*  https://creativecommons.org/licenses/by/4.0/
+*
+*  This is part of the pipiline used for the contruction of the WikiMID resource
+*  There are several aspects of the project (source and documentation) we are improving. 
+*  
+*/
+
 package it.uniroma1.lcl.wikimid.mapping.mapper.babelnet;
 
 import com.google.common.collect.HashMultimap;
@@ -25,15 +37,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-/**
- *
- * @author sfaralli
- */
 public class BabelNetCandidatesEN extends Candidates<BabelSynset> {
 
     private Multimap<TwitterUser, BabelSynset> candidates = null;
-    private Multimap<TwitterUser2, BabelSynset> candidates2= null;
+    private Multimap<TwitterUser2, BabelSynset> candidates2 = null;
     private BabelNet bn;
     private CandidateMethod cm;
     private BabelSenseSource[] bsss = new BabelSenseSource[]{BabelSenseSource.WIKI, BabelSenseSource.WIKIRED, BabelSenseSource.WIKIDIS};
@@ -56,7 +63,6 @@ public class BabelNetCandidatesEN extends Candidates<BabelSynset> {
 
             List<String> names = NameDecomposition.nameDecompostion(tu, cm);
             for (String n : names) {
-            //    logger.log(Level.INFO,"Name:"+n);
 
                 List<BabelSynset> senses = bn.getSynsets(n, Language.EN, BabelPOS.NOUN, null, true, bsss);
                 candidates.putAll(tu, senses);
@@ -95,11 +101,10 @@ public class BabelNetCandidatesEN extends Candidates<BabelSynset> {
 
             List<String> names = NameDecomposition.nameDecompostion(tu, cm);
             for (String n : names) {
-            //    logger.log(Level.INFO,"Name:"+n);
 
                 List<BabelSynset> senses = bn.getSynsets(n, Language.EN, BabelPOS.NOUN, null, true, bsss);
                 candidates.putAll(tu, senses);
-                //  logger.log(Level.INFO,"Candidates:"+senses);
+
                 if (senses != null && senses.size() > 0) {
                     break;
                 }
@@ -110,19 +115,15 @@ public class BabelNetCandidatesEN extends Candidates<BabelSynset> {
         }
         return null;
     }
- public List<BabelSynset> getOnFlyCandidates2(TwitterUser2 tu) {
 
-       // if (candidates2 == null) {
-            candidates2= HashMultimap.create();
-        //}
-        //if (candidates2.containsKey(tu)) {
-        //    return new ArrayList<BabelSynset>(candidates2.get(tu));
-        //}
+    public List<BabelSynset> getOnFlyCandidates2(TwitterUser2 tu) {
+
+        candidates2 = HashMultimap.create();
+
         try {
 
             List<String> names = NameDecomposition.nameDecompostion2(tu, cm);
             for (String n : names) {
-            //    logger.log(Level.INFO,"Name:"+n);
 
                 List<BabelSynset> senses = bn.getSynsets(n, Language.EN, BabelPOS.NOUN, null, true, bsss);
                 candidates2.putAll(tu, senses);
@@ -137,6 +138,7 @@ public class BabelNetCandidatesEN extends Candidates<BabelSynset> {
         }
         return null;
     }
+
     @Override
     public Multimap<TwitterUser, BabelSynset> getOnFlyAllCandidates(TwitterPopulation tp) {
         HashMultimap<TwitterUser, BabelSynset> result = HashMultimap.create();

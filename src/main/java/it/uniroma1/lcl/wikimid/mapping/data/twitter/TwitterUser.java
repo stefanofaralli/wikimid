@@ -1,20 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* WikiMID
+* Giorgia Di Tommaso, Stefano Faralli, Giovanni Stilo, Paola Velardi
+*
+* 
+* Project and Resources:
+*  http://wikimid.tweets.di.uniroma1.it/wikimid/
+*  https://figshare.com/articles/Wiki-MID_Dataset_LOD_TSV_/6231326/1
+*  https://github.com/stefanofaralli/wikimid
+* License  
+*  https://creativecommons.org/licenses/by/4.0/
+*
+*  This is part of the pipiline used for the contruction of the WikiMID resource
+*  There are several aspects of the project (source and documentation) we are improving. 
+*  
  */
 package it.uniroma1.lcl.wikimid.mapping.data.twitter;
 
 import it.uniroma1.lcl.jlt.util.IntegerCounter;
 import it.uniroma1.lcl.wikimid.mapping.mapper.text.Tokenizer;
 
-
-/**
- *
- * @author sfaralli
- */
 public class TwitterUser {
-    // COMMENTO RANDOM
 
     private String twitterID;
     private String screen_name;
@@ -24,7 +29,7 @@ public class TwitterUser {
     private String language;
     private IntegerCounter<String> context = null;
 
-    public static TwitterUser fromLine(String line,boolean verifiedorpopular) {
+    public static TwitterUser fromLine(String line, boolean verifiedorpopular) {
         try {
             String[] lines = line.split("\t");
             String twitterID = lines[0];
@@ -33,11 +38,10 @@ public class TwitterUser {
             String location = lines[3];
             String statusline = lines[4];
             String language = lines[7];
-            if (
-                    language.equals("en")&&
-                    (!verifiedorpopular||(verifiedorpopular && (lines[9].equals("true")||lines[11].equals("1"))))
-                  )
+            if (language.equals("en")
+                    && (!verifiedorpopular || (verifiedorpopular && (lines[9].equals("true") || lines[11].equals("1"))))) {
                 return new TwitterUser(twitterID, screen_name, name, location, statusline, language);
+            }
             return null;
         } catch (Exception e) {
             return null;

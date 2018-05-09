@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package it.uniroma1.lcl.wikimid.mapping.mapper.babelnet;
 
 import it.uniroma1.lcl.babelnet.BabelSynset;
@@ -25,11 +20,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-/**
- *
- * @author sfaralli
- */
 public class BabelNetMapperIT extends Mapper<BabelSynset> {
 
     BabelNetCandidatesIT candidatesName;
@@ -38,7 +28,6 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
     Map<TwitterUser, DoubleCounter<BabelSynset>> mapping;
     final static Logger logger = Logger.getGlobal();
     private static HashMap<String, BabelNetMapperIT> instances = null;
-    private String outputfile;
 
     private BabelNetMapperIT() {
         candidatesName = new BabelNetCandidatesIT(CandidateMethod.NAME_DECOMPOSITION);
@@ -92,7 +81,7 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
         }
         return result;
     }
- 
+
     public DoubleCounter<BabelSynset> onFlyMap2(TwitterUser2 tu) {
         DoubleCounter<BabelSynset> result = new DoubleCounter<BabelSynset>();
         List<BabelSynset> candidates = candidatesName.getOnFlyCandidates2(tu);
@@ -106,6 +95,7 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
         }
         return result;
     }
+
     public DoubleCounter<BabelSynset> disambiguate(TwitterUser tu, List<BabelSynset> candidates) {
 
         DoubleCounter<BabelSynset> result = new DoubleCounter<BabelSynset>();
@@ -119,7 +109,8 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
         }
         return result;
     }
- public DoubleCounter<BabelSynset> disambiguate2(TwitterUser2 tu, List<BabelSynset> candidates) {
+
+    public DoubleCounter<BabelSynset> disambiguate2(TwitterUser2 tu, List<BabelSynset> candidates) {
 
         DoubleCounter<BabelSynset> result = new DoubleCounter<BabelSynset>();
         if (candidates.size() == 1) {
@@ -132,6 +123,7 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
         }
         return result;
     }
+
     @Override
     public void onFlyMap(TwitterPopulation tp, String outputfile) {
         BufferedWriter bw;
@@ -154,132 +146,27 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
         }
 
     }
- @Override
+
+    @Override
     public void onFlyScreenname2Wiki(TwitterPopulation tp, String outputfile) {
         BufferedWriter bw;
         try {
             bw = Files.getBufferedWriter(outputfile);
 
-            for (TwitterUser tu : tp.getPopulation()) 
-            {
+            for (TwitterUser tu : tp.getPopulation()) {
                 DoubleCounter<BabelSynset> res = onFlyMap(tu);
                 logger.log(Level.INFO, "TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
                 logger.log(Level.INFO, "BNs: " + res);
-                if (!res.keySet().isEmpty())
-                    try
-                    {
-                    bw.write(tu.getScreen_name()+"\t"+"WIKI:EN:"+res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/","").replace(" ","_")+"\n");    
-                    bw.flush();
+                if (!res.keySet().isEmpty()) {
+                    try {
+                        bw.write(tu.getScreen_name() + "\t" + "WIKI:EN:" + res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/", "").replace(" ", "_") + "\n");
+                        bw.flush();
+                    } catch (Exception e) {
+                        bw.write(tu.getScreen_name() + "\t\n");
                     }
-                    catch(Exception e)
-                    {
-                    bw.write(tu.getScreen_name()+"\t\n");    
-                    }
-                else
-                    bw.write(tu.getScreen_name()+"\t\n");    
-            }
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    public void onFlyScreenname2Wiki2STOPATID(TwitterPopulation2 tp, String outputfile,String idtostop) {
-        BufferedWriter bw;
-        try {
-            bw = Files.getBufferedWriter(outputfile);
-
-            for (TwitterUser2 tu : tp.getPopulation()) 
-            {
-                if (tu.getTwitterID().equals(idtostop)) break;
-                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
-                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
-                 System.out.println( "BNs: " + res);
-                if (!res.keySet().isEmpty())
-                    try
-                    {
-                    bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\t"+"WIKI:EN:"+res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/","").replace(" ","_")+"\n");    
-                    bw.flush();
-                    }
-                    catch(Exception e)
-                    {
-                   // bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
-                    }
-             //   else
-             //       bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
-            }
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    
-    public void onFlyScreenname2Wiki2STARTAFTERIDANDSTOP(TwitterPopulation2 tp, String outputfile,String idtostart,String idtostop) {
-         BufferedWriter bw;
-        try {
-            bw = Files.getBufferedWriter(outputfile);
-            boolean trovato=false;
-            for (TwitterUser2 tu : tp.getPopulation()) 
-            {
-                
-                    if (tu.getTwitterID().equals(idtostop)) break;
-                if (tu.getTwitterID().equals(idtostart)) 
-                {
-                    trovato=true;
-                    continue;
+                } else {
+                    bw.write(tu.getScreen_name() + "\t\n");
                 }
-                if (!trovato) continue;
-                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
-                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
-                 System.out.println( "BNs: " + res);
-                if (!res.keySet().isEmpty())
-                    try
-                    {
-                    bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\t"+"WIKI:EN:"+res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/","").replace(" ","_")+"\n");    
-                    bw.flush();
-                    }
-                    catch(Exception e)
-                    {
-                   // bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
-                    }
-             //   else
-             //       bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
-            }
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    public void onFlyScreenname2Wiki2STARTAFTERID(TwitterPopulation2 tp, String outputfile,String idtostart) {
-        BufferedWriter bw;
-        try {
-            bw = Files.getBufferedWriter(outputfile);
-            boolean trovato=false;
-            for (TwitterUser2 tu : tp.getPopulation()) 
-            {
-                
-                if (tu.getTwitterID().equals(idtostart)) 
-                {
-                    trovato=true;
-                    continue;
-                }
-                if (!trovato) continue;
-                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
-                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
-                 System.out.println( "BNs: " + res);
-                if (!res.keySet().isEmpty())
-                    try
-                    {
-                    bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\t"+"WIKI:EN:"+res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/","").replace(" ","_")+"\n");    
-                    bw.flush();
-                    }
-                    catch(Exception e)
-                    {
-                   // bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
-                    }
-             //   else
-             //       bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
             }
             bw.close();
         } catch (IOException ex) {
@@ -287,62 +174,28 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
         }
 
     }
-     public void onFlyScreenname2Wiki2(TwitterPopulation2 tp, String outputfile) {
+
+    public void onFlyScreenname2Wiki2STOPATID(TwitterPopulation2 tp, String outputfile, String idtostop) {
         BufferedWriter bw;
         try {
             bw = Files.getBufferedWriter(outputfile);
 
-            for (TwitterUser2 tu : tp.getPopulation()) 
-            {
-                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
-                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
-                 System.out.println( "BNs: " + res);
-                if (!res.keySet().isEmpty())
-                    try
-                    {
-                    bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\t"+"WIKI:EN:"+res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/","").replace(" ","_")+"\n");    
-                    bw.flush();
-                    }
-                    catch(Exception e)
-                    {
-                   // bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
-                    }
-             //   else
-             //       bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\tNOMAP\n");    
-            }
-            bw.close();
-        } catch (IOException ex) {
-            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-    public void onFlyScreenname2Wiki2(TwitterPopulation2 tp, String outputfile,String reprisefrom) {
-        BufferedWriter bw;
-        try {
-            bw = Files.getBufferedWriter(outputfile,true);
-            boolean proceed=false;
-            for (TwitterUser2 tu : tp.getPopulation()) 
-            {
-                if (!proceed)
-                {
-                if (tu.getScreen_name().equals(reprisefrom)) proceed=true;
-                continue;
+            for (TwitterUser2 tu : tp.getPopulation()) {
+                if (tu.getTwitterID().equals(idtostop)) {
+                    break;
                 }
                 DoubleCounter<BabelSynset> res = onFlyMap2(tu);
                 System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
                 System.out.println("BNs: " + res);
-                if (!res.keySet().isEmpty())
-                    try
-                    {
-                    bw.write(tu.getTwitterID()+"\t"+tu.getScreen_name()+"\t"+"WIKI:EN:"+res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/","").replace(" ","_")+"\n");    
-                    bw.flush();
+                if (!res.keySet().isEmpty()) {
+                    try {
+                        bw.write(tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + "WIKI:EN:" + res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/", "").replace(" ", "_") + "\n");
+                        bw.flush();
+                    } catch (Exception e) {
+
                     }
-                    catch(Exception e)
-                    {
-                   // bw.write(tu.getScreen_name()+"\t\n");    
-                    }
-              /*  else
-                    bw.write(tu.getScreen_name()+"\t\n");   */
+                }
+
             }
             bw.close();
         } catch (IOException ex) {
@@ -350,6 +203,135 @@ public class BabelNetMapperIT extends Mapper<BabelSynset> {
         }
 
     }
+
+    public void onFlyScreenname2Wiki2STARTAFTERIDANDSTOP(TwitterPopulation2 tp, String outputfile, String idtostart, String idtostop) {
+        BufferedWriter bw;
+        try {
+            bw = Files.getBufferedWriter(outputfile);
+            boolean trovato = false;
+            for (TwitterUser2 tu : tp.getPopulation()) {
+
+                if (tu.getTwitterID().equals(idtostop)) {
+                    break;
+                }
+                if (tu.getTwitterID().equals(idtostart)) {
+                    trovato = true;
+                    continue;
+                }
+                if (!trovato) {
+                    continue;
+                }
+                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
+                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
+                System.out.println("BNs: " + res);
+                if (!res.keySet().isEmpty()) {
+                    try {
+                        bw.write(tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + "WIKI:EN:" + res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/", "").replace(" ", "_") + "\n");
+                        bw.flush();
+                    } catch (Exception e) {
+
+                    }
+                }
+
+            }
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void onFlyScreenname2Wiki2STARTAFTERID(TwitterPopulation2 tp, String outputfile, String idtostart) {
+        BufferedWriter bw;
+        try {
+            bw = Files.getBufferedWriter(outputfile);
+            boolean trovato = false;
+            for (TwitterUser2 tu : tp.getPopulation()) {
+
+                if (tu.getTwitterID().equals(idtostart)) {
+                    trovato = true;
+                    continue;
+                }
+                if (!trovato) {
+                    continue;
+                }
+                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
+                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
+                System.out.println("BNs: " + res);
+                if (!res.keySet().isEmpty()) {
+                    try {
+                        bw.write(tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + "WIKI:EN:" + res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/", "").replace(" ", "_") + "\n");
+                        bw.flush();
+                    } catch (Exception e) {
+
+                    }
+                }
+
+            }
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void onFlyScreenname2Wiki2(TwitterPopulation2 tp, String outputfile) {
+        BufferedWriter bw;
+        try {
+            bw = Files.getBufferedWriter(outputfile);
+
+            for (TwitterUser2 tu : tp.getPopulation()) {
+                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
+                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
+                System.out.println("BNs: " + res);
+                if (!res.keySet().isEmpty()) {
+                    try {
+                        bw.write(tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + "WIKI:EN:" + res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/", "").replace(" ", "_") + "\n");
+                        bw.flush();
+                    } catch (Exception e) {
+
+                    }
+                }
+
+            }
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void onFlyScreenname2Wiki2(TwitterPopulation2 tp, String outputfile, String reprisefrom) {
+        BufferedWriter bw;
+        try {
+            bw = Files.getBufferedWriter(outputfile, true);
+            boolean proceed = false;
+            for (TwitterUser2 tu : tp.getPopulation()) {
+                if (!proceed) {
+                    if (tu.getScreen_name().equals(reprisefrom)) {
+                        proceed = true;
+                    }
+                    continue;
+                }
+                DoubleCounter<BabelSynset> res = onFlyMap2(tu);
+                System.out.println("TP: " + tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + tu.getName());
+                System.out.println("BNs: " + res);
+                if (!res.keySet().isEmpty()) {
+                    try {
+                        bw.write(tu.getTwitterID() + "\t" + tu.getScreen_name() + "\t" + "WIKI:EN:" + res.getSortedElements().iterator().next().getMainSense(Language.EN).getDBPediaURI().replace("http://DBpedia.org/resource/", "").replace(" ", "_") + "\n");
+                        bw.flush();
+                    } catch (Exception e) {
+
+                    }
+                }
+
+            }
+            bw.close();
+        } catch (IOException ex) {
+            Logger.getLogger(BabelNetMapperIT.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
     @Override
     public Map<TwitterUser, DoubleCounter<BabelSynset>> map(TwitterPopulation tp) {
         HashMap<TwitterUser, DoubleCounter<BabelSynset>> result = new HashMap<TwitterUser, DoubleCounter<BabelSynset>>();

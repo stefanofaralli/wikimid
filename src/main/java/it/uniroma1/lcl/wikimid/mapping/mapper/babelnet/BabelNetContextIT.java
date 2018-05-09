@@ -1,8 +1,20 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* WikiMID
+* Giorgia Di Tommaso, Stefano Faralli, Giovanni Stilo, Paola Velardi
+*
+* 
+* Project and Resources:
+*  http://wikimid.tweets.di.uniroma1.it/wikimid/
+*  https://figshare.com/articles/Wiki-MID_Dataset_LOD_TSV_/6231326/1
+*  https://github.com/stefanofaralli/wikimid
+* License  
+*  https://creativecommons.org/licenses/by/4.0/
+*
+*  This is part of the pipiline used for the contruction of the WikiMID resource
+*  There are several aspects of the project (source and documentation) we are improving. 
+*  
+*/
+
 package it.uniroma1.lcl.wikimid.mapping.mapper.babelnet;
 
 import it.uniroma1.lcl.babelnet.BabelNet;
@@ -21,147 +33,129 @@ import it.uniroma1.lcl.babelnet.data.BabelPointer;
 import it.uniroma1.lcl.wikimid.mapping.mapper.data.Context;
 import it.uniroma1.lcl.wikimid.mapping.mapper.text.Tokenizer;
 
-/**
- *
- * @author sfaralli
- */
-public class BabelNetContextIT extends Context<BabelSynset>
-{
-    public static BabelNet bbn=BabelNet.getInstance();
-    public static Map<BabelSynset,IntegerCounter<String>> context=null;
+public class BabelNetContextIT extends Context<BabelSynset> {
+
+    public static BabelNet bbn = BabelNet.getInstance();
+    public static Map<BabelSynset, IntegerCounter<String>> context = null;
+
     @Override
-    public IntegerCounter<String> getContext(BabelSynset elem) 
-    {
-        if (context==null) context=new HashMap<BabelSynset,IntegerCounter<String>>();
-        if (context.containsKey(elem)) return context.get(elem);
-        IntegerCounter<String> result=new IntegerCounter<String>();
-        
+    public IntegerCounter<String> getContext(BabelSynset elem) {
+        if (context == null) {
+            context = new HashMap<BabelSynset, IntegerCounter<String>>();
+        }
+        if (context.containsKey(elem)) {
+            return context.get(elem);
+        }
+        IntegerCounter<String> result = new IntegerCounter<String>();
+
         try {
-            for (BabelGloss s:elem.getGlosses(Language.IT))
-            {
-                String[] tokenized=Tokenizer.tokenize(s.getGloss()).split(" ");
-                for (String t:tokenized)
-                    if (!t.trim().isEmpty())
-                         result.count(t);
+            for (BabelGloss s : elem.getGlosses(Language.IT)) {
+                String[] tokenized = Tokenizer.tokenize(s.getGloss()).split(" ");
+                for (String t : tokenized) {
+                    if (!t.trim().isEmpty()) {
+                        result.count(t);
+                    }
+                }
             }
-            
+
         } catch (IOException ex) {
             Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
         }
-        context.put(elem,result);
+        context.put(elem, result);
         return result;
     }
+
     @Override
-    public IntegerCounter<String> getNeighborhoodContext(BabelSynset elem) 
-    {
-        //logger.log(Level.INFO,"\t neighborhood:"+elem.toString());
-        IntegerCounter<String> result=new IntegerCounter<String>();
+    public IntegerCounter<String> getNeighborhoodContext(BabelSynset elem) {
+        IntegerCounter<String> result = new IntegerCounter<String>();
         result.addFrom(getContext(elem));
-         int count=0;
-         for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ALSO_SEE)) 
-         {
-           count++;
+        int count = 0;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ALSO_SEE)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                if (count%35==0)
-                        System.gc();
+                if (count % 35 == 0) {
+                    System.gc();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.GLOSS_DISAMBIGUATED)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.GLOSS_DISAMBIGUATED)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                if (count%35==0)
-                        System.gc();
+                if (count % 35 == 0) {
+                    System.gc();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.DERIVATIONALLY_RELATED)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.DERIVATIONALLY_RELATED)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                if (count%35==0)
-                        System.gc();
+                if (count % 35 == 0) {
+                    System.gc();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.GLOSS_MONOSEMOUS)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.GLOSS_MONOSEMOUS)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                if (count%35==0)
-                        System.gc();
+                if (count % 35 == 0) {
+                    System.gc();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ANY_HYPERNYM)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ANY_HYPERNYM)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                if (count%35==0)
-                        System.gc();
+                if (count % 35 == 0) {
+                    System.gc();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ANY_MERONYM)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ANY_MERONYM)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                /*if (count%35==0)
-                        System.gc();*/
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-           for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.TOPIC)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.TOPIC)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                if (count%35==0)
-                        System.gc();
+                if (count % 35 == 0) {
+                    System.gc();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-          for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.TOPIC_MEMBER)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.TOPIC_MEMBER)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-          /*      if (count%35==0)
-                        System.gc();*/
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-         for(BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ANY_HOLONYM)) 
-         {
-           count++;
+        for (BabelSynsetIDRelation edge : elem.getEdges(BabelPointer.ANY_HOLONYM)) {
+            count++;
             try {
-          //      logger.log(Level.INFO,"\t \t:"+edge.getBabelSynsetIDTarget());
                 result.addFrom(getContext(bbn.getSynset(edge.getBabelSynsetIDTarget())));
-                /*if (count%35==0)
-                        System.gc();*/
             } catch (IOException ex) {
                 Logger.getLogger(BabelNetContextIT.class.getName()).log(Level.SEVERE, null, ex);
             }

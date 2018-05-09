@@ -1,3 +1,20 @@
+/*
+* WikiMID
+* Giorgia Di Tommaso, Stefano Faralli, Giovanni Stilo, Paola Velardi
+*
+* 
+* Project and Resources:
+*  http://wikimid.tweets.di.uniroma1.it/wikimid/
+*  https://figshare.com/articles/Wiki-MID_Dataset_LOD_TSV_/6231326/1
+*  https://github.com/stefanofaralli/wikimid
+* License  
+*  https://creativecommons.org/licenses/by/4.0/
+*
+*  This is part of the pipiline used for the contruction of the WikiMID resource
+*  There are several aspects of the project (source and documentation) we are improving. 
+*  
+*/
+
 package it.uniroma1.lcl.wikimid.mapping.data.twitter;
 
 import it.uniroma1.lcl.jlt.util.Files;
@@ -11,38 +28,35 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author sfaralli
- */
 public class TwitterPopulation {
 
     private static HashMap<String, TwitterPopulation> instances = null;
-    private static BufferedReader itbr=null;
-    public static TwitterPopulation getIterator(String source, boolean verifiedorpopular) 
-    {
+    private static BufferedReader itbr = null;
+
+    public static TwitterPopulation getIterator(String source, boolean verifiedorpopular) {
         if (instances == null) {
             instances = new HashMap<String, TwitterPopulation>();
         }
         if (instances.containsKey(source)) {
             return instances.get(source);
         } else {
-            instances.put(source, new TwitterPopulation(source,verifiedorpopular,true));
+            instances.put(source, new TwitterPopulation(source, verifiedorpopular, true));
             return instances.get(source);
         }
     }
     private List<TwitterUser> population = null;
 
-    private TwitterPopulation(String source,boolean verifiedorpopular) {
+    private TwitterPopulation(String source, boolean verifiedorpopular) {
         population = new ArrayList<TwitterUser>();
         BufferedReader br;
         try {
             br = Files.getBufferedReader(source);
             while (br.ready()) {
                 String line = br.readLine();
-                TwitterUser tu=TwitterUser.fromLine(line,verifiedorpopular);
-                if (tu!=null)
-                population.add(tu);
+                TwitterUser tu = TwitterUser.fromLine(line, verifiedorpopular);
+                if (tu != null) {
+                    population.add(tu);
+                }
             }
             br.close();
 
@@ -51,48 +65,49 @@ public class TwitterPopulation {
         }
 
     }
-   private TwitterPopulation(String source,boolean verifiedorpopular,boolean iter) {
-        
-       
+
+    private TwitterPopulation(String source, boolean verifiedorpopular, boolean iter) {
+
         try {
             //itbr = Files.getBufferedReader(source);
-          itbr = new BufferedReader(new InputStreamReader(new FileInputStream(source)/*, "UTF-8"*/)); 
+            itbr = new BufferedReader(new InputStreamReader(new FileInputStream(source)/*, "UTF-8"*/));
 
         } catch (IOException ex) {
             Logger.getLogger(TwitterPopulation.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
+
     public List<TwitterUser> getPopulation() {
         return population;
     }
 
-    public static TwitterPopulation getInstance(String source,boolean verifiedorpopular) {
+    public static TwitterPopulation getInstance(String source, boolean verifiedorpopular) {
         if (instances == null) {
             instances = new HashMap<String, TwitterPopulation>();
         }
         if (instances.containsKey(source)) {
             return instances.get(source);
         } else {
-            instances.put(source, new TwitterPopulation(source,verifiedorpopular));
+            instances.put(source, new TwitterPopulation(source, verifiedorpopular));
             return instances.get(source);
         }
     }
 
     public TwitterUser getNext() throws IOException {
-        if (itbr==null) 
-            return null;
-        if (!itbr.ready()) { 
-            itbr.close();
-            itbr=null; 
+        if (itbr == null) {
             return null;
         }
-        TwitterUser tu=null;
-        while (tu==null&&itbr.ready()) 
-        {
-        String line = itbr.readLine();
-               tu=TwitterUser.fromLine(line,false);
-        }       
-            return tu;
+        if (!itbr.ready()) {
+            itbr.close();
+            itbr = null;
+            return null;
+        }
+        TwitterUser tu = null;
+        while (tu == null && itbr.ready()) {
+            String line = itbr.readLine();
+            tu = TwitterUser.fromLine(line, false);
+        }
+        return tu;
     }
 }

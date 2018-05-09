@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+* WikiMID
+* Giorgia Di Tommaso, Stefano Faralli, Giovanni Stilo, Paola Velardi
+*
+* 
+* Project and Resources:
+*  http://wikimid.tweets.di.uniroma1.it/wikimid/
+*  https://figshare.com/articles/Wiki-MID_Dataset_LOD_TSV_/6231326/1
+*  https://github.com/stefanofaralli/wikimid
+* License  
+*  https://creativecommons.org/licenses/by/4.0/
+*
+*  This is part of the pipiline used for the contruction of the WikiMID resource
+*  There are several aspects of the project (source and documentation) we are improving. 
+*  
  */
 package it.uniroma1.lcl.wikimid.mapping.data.twitter;
 
@@ -10,12 +21,7 @@ import it.uniroma1.lcl.wikimid.mapping.mapper.text.Tokenizer;
 
 import java.util.Set;
 
-/**
- *
- * @author sfaralli
- */
 public class TwitterUser2 {
-
 
     private String twitterID;
     private String screen_name;
