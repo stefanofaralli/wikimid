@@ -1,4 +1,4 @@
-# Wiki-Mid
+# Wiki-MID
 http://wikimid.tweets.di.uniroma1.it/wikimid/<br>
 https://doi.org/10.6084/m9.figshare.6231326.v1/<br>
 Giorgia Di Tommaso(1), Stefano Faralli(2), Giovanni Stilo(1), Paola Velardi(1)<br>
