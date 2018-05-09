@@ -1,0 +1,7 @@
+Wiki-MID 
+Giorgia Di Tommaso(1), Stefano Faralli(2), Giovanni Stilo(1), Paola Velardi(1)
+(1) University of Rome Sapienza
+(2) University of Rome Unitelma Sapienza
+
+resource and software are released under 
+https://creativecommons.org/licenses/by/4.0/
