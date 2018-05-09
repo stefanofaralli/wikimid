@@ -19,13 +19,27 @@ https://creativecommons.org/licenses/by/4.0/
  
 <u>Mapping Twitter Users to Wikipedia:</u><br>
 There are currently two main classes, it.uniroma1.lcl.wikimid.mapping.Twitter2WikipediaEN and it.uniroma1.lcl.wikimid.mapping.Twitter2WikipediaIT, for English and Italian respectively. <br>
-The two classes receive as command shell argument the dataset filename of twitter user profiles to be mapped into wikipedia pages, and output a file in the same path with extension "".mapping.tsv"".<br>
-The input file is a tabbaed separated file with the following format:<br>
+The two classes receive as command shell argument the dataset filename of twitter user profiles to be mapped into wikipedia pages, and output a file in the same path with extension ".mapping.tsv".<br>
+The input file is a tabbaed separated file with information from retrived Twitter user-objects (https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) the following format:<br>
 
 Id TAB ScreenName TAB Name TAB Location TAB Description TAB URL TAB Verified TAB FollowersCount TAB FriendsCount TAB ListedCount TAB StatusesCount TAB CreatedAt TAB Lang TAB WithheldInCountries <br>
 where:<br>
 <ul>
- <li><b>Id:</b></li>
+ <li><b>Id:</b> corresponds to the field <i>id</i> of a user-object</li>
+  <li><b>ScreenName:</b>corresponds to the field <i>screen_name</i> of a user-object</li>
+  <li><b>Name:</b>corresponds to the field <i>name</i> of a user-object</li>
+  <li><b>Location:</b>corresponds to the field <i>location</i> of a user-object</li>
+  <li><b>Description:</b>corresponds to the field <i>description</i> of a user-object</li>
+  <li><b>URL:</b>corresponds to the field <i>url</i> of a user-object</li>
+   <li><b>Verified:</b>corresponds to the field <i>verified</i> of a user-object</li>
+  <li><b>FollowersCount:</b>corresponds to the field <i>followers_count</i> of a user-object</li>
+    <li><b>FriendsCount:</b>corresponds to the field <i>friends_count</i> of a user-object</li>
+  <li><b>ListedCount:</b>corresponds to the field <i>listed_count</i> of a user-object</li>
+    <li><b>StatusesCount:</b>corresponds to the field <i>statuses_count</i> of a user-object</li>
+  <li><b>CreatedAt:</b>corresponds to the field <i>created_at</i> of a user-object</li>
+     <li><b>Lang:</b>corresponds to the field <i>lang</i> of a user-object</li>
+  <li><b>WithheldInCountries:</b>corresponds to the field <i>withheld_in_countries</i> of a user-object</li>
+ 
  </ul>
 
 
