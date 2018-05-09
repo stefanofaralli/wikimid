@@ -1,6 +1,6 @@
 # Wiki-Mid
 http://wikimid.tweets.di.uniroma1.it/wikimid/<br>
-https://figshare.com/articles/Wiki-MID_Dataset_LOD_TSV_/6231326/1
+https://doi.org/10.6084/m9.figshare.6231326.v1
 * Giorgia Di Tommaso, Stefano Faralli, Giovanni Stilo, Paola Velardi
 
 # Project Description:
