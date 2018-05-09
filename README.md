@@ -15,9 +15,8 @@ Our resource is designed on top of the Semantically-Interlinked Online Communiti
 # License
 https://creativecommons.org/licenses/by/4.0/
 
-# Documentation
- 
-<u>Mapping Twitter Users to Wikipedia:</u><br>
+# Mapping Twitter Users to Wikipedia:
+
 There are currently two main classes, it.uniroma1.lcl.wikimid.mapping.Twitter2WikipediaEN and it.uniroma1.lcl.wikimid.mapping.Twitter2WikipediaIT, for English and Italian respectively. <br>
 The two classes receive as command shell argument the dataset filename of twitter user profiles to be mapped into wikipedia pages, and output a file in the same path with extension ".mapping.tsv".<br>
 The input file is a tabbaed separated file with information from retrived Twitter user-objects (https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) the following format:<br>
