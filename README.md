@@ -18,6 +18,8 @@ https://creativecommons.org/licenses/by/4.0/
 
 # Mapping Twitter Users to Wikipedia
 
+it.uniroma1.lcl.wikimid.mapping<br>
+
 There are currently two main classes, it.uniroma1.lcl.wikimid.mapping.Twitter2WikipediaEN and it.uniroma1.lcl.wikimid.mapping.Twitter2WikipediaIT, for English and Italian respectively. <br>
 The two classes receive as command shell argument the dataset filename of twitter user profiles to be mapped into wikipedia pages, and output a file in the same path with extension ".mapping.tsv".<br>
 The input file is a tabbaed separated file with information from retrived Twitter user-objects (https://developer.twitter.com/en/docs/tweets/data-dictionary/overview/user-object) the following format:<br>
@@ -42,7 +44,37 @@ where:<br>
  
  </ul>
 
+# Extraction of interests from Tweets
 
+it.uniroma1.di.recsys.preprocessing<br>
+
+This component filters the rows of a tab separeted values file with the following fomrmat:
+Id TAB tweetID TAB tweet
+<ul>
+ <li><b>Id:</b> corresponds to the field <i>id</i> of a user-object</li>
+  <li><b>tweetID:</b> corresponds to the field <i>id</i> of a tweet-object</li>
+  <li><b>tweet:</b> corresponds to the field <i>text</i> of a tweet-object</li>
+</ul>
+Rows are selected when the content of a <b>tweet</b> contains a link related to a specific platform (e.g., Spotify).
+
+
+# Wikipedia indexing
+
+it.uniroma1.di.recsys.index<br>
+This component, with the support of a Wikipedia dump and the code from https://github.com/attardi/wikiextractor create a lucene index.
+
+
+# Mapping interests to Wikipedia
+
+it.uniroma1.di.recsys.index<br>
+
+This component takes in input a list of interests and map each interest onto a wikipedia page. The format of the input depends by the platform:<br>
+<ul>
+ <li><b>Spotify:</b>[Title TAB Author] where Title and Author are related to a specific song;</li>
+ <li><b>Goodreads:</b>[Title TAB Author] where Title and Author are related to a specific book;</li>
+ <li><b>IMDB:</b>[Title TAB Year] where Title and Year are related to a specific movie;</li>
+</ul>
+ 
 
 
 
