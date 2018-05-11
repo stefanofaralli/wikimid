@@ -61,12 +61,13 @@ Rows are selected when the content of a <b>tweet</b> contains a link related to 
 # Wikipedia indexing
 
 it.uniroma1.di.recsys.index<br>
+
 This component, with the support of a Wikipedia dump and the code from https://github.com/attardi/wikiextractor create a lucene index.
 
 
 # Mapping interests to Wikipedia
 
-it.uniroma1.di.recsys.index<br>
+<br>
 
 This component takes in input a list of interests and map each interest onto a wikipedia page. The format of the input depends by the platform:<br>
 <ul>
