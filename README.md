@@ -67,7 +67,7 @@ This component, with the support of a Wikipedia dump and the code from https://g
 
 # Mapping interests to Wikipedia
 
-<br>
+it.uniroma1.di.recsys.index<br>
 
 This component takes in input a list of interests and map each interest onto a wikipedia page. The format of the input depends by the platform:<br>
 <ul>
